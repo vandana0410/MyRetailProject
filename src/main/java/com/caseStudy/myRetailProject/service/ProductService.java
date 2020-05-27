@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 /**
  * @author vandana
- *
+ * 
  */
 @Service
 public class ProductService {
@@ -95,7 +95,7 @@ public class ProductService {
 	 */
 	public Product updatePriceById(Product product, Integer productId) throws ProductException {
 
-		logger.info("Updating the Price of product id" + productId);
+		logger.info("Updating the Price of product id " + productId);
 		Product currentProduct;
 		try {
 			currentProduct = productRepository.findProductByProductId(productId);
@@ -103,6 +103,10 @@ public class ProductService {
 			if (currentProduct != null) {
 				currentProduct.setCurrentPrice(product.getCurrentPrice());
 				productRepository.save(currentProduct);
+			}else {
+				logger.info("Product not available");
+				throw new ProductNotFoundException(
+						"Product "  + productId + " id not available");
 			}
 		} catch (ProductException ex) {
 			logger.info("Exception occured updating the product price for product id: " + productId);

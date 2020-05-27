@@ -13,7 +13,7 @@
 	<artifactId>myRetailProject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>myRetailProject</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Case Study - MyRetail Restful Service</description>
 
 	<properties>
 		<java.version>1.8</java.version>

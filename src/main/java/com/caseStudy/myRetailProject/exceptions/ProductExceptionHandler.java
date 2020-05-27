@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 @ControllerAdvice
 public class ProductExceptionHandler extends ResponseEntityExceptionHandler {
@@ -25,6 +24,13 @@ public class ProductExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(new RestApiErrors(HttpStatus.METHOD_NOT_ALLOWED, error, ex));
 	}
 
+	@Override
+	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		String error = "BAD URL";
+		return buildResponseEntity(new RestApiErrors(HttpStatus.NOT_FOUND, error, ex));
+	}
+
 	@ExceptionHandler(ProductNotFoundException.class)
 	public final ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException ex,
 			WebRequest request) {
@@ -32,52 +38,44 @@ public class ProductExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(new RestApiErrors(HttpStatus.BAD_REQUEST, error, ex));
 
 	}
-	
 
 	@ExceptionHandler({ MethodArgumentTypeMismatchException.class })
 	public ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
 			WebRequest request) {
 		String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
 
-		RestApiErrors apiError = new RestApiErrors(HttpStatus.BAD_REQUEST, error,ex);
+		RestApiErrors apiError = new RestApiErrors(HttpStatus.BAD_REQUEST, error, ex);
 		return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
 	}
-	
-	
+
 	@ExceptionHandler(RestClientException.class)
-	public final ResponseEntity<Object> handleRestClientException(RestClientException ex,
-			WebRequest request) {
+	public final ResponseEntity<Object> handleRestClientException(RestClientException ex, WebRequest request) {
 		String error = ex.getMessage();
 		return buildResponseEntity(new RestApiErrors(HttpStatus.INTERNAL_SERVER_ERROR, error, ex));
 
 	}
-	
+
 	@ExceptionHandler(ProductException.class)
-	public final ResponseEntity<Object> handleProductException(IOException ex,
-			WebRequest request) {
+	public final ResponseEntity<Object> handleProductException(IOException ex, WebRequest request) {
 		String error = ex.getMessage();
 		return buildResponseEntity(new RestApiErrors(HttpStatus.INTERNAL_SERVER_ERROR, error, ex));
 
 	}
-	
+
 	@ExceptionHandler(IOException.class)
-	public final ResponseEntity<Object> handleIOException(IOException ex,
-			WebRequest request) {
+	public final ResponseEntity<Object> handleIOException(IOException ex, WebRequest request) {
 		String error = ex.getMessage();
 		return buildResponseEntity(new RestApiErrors(HttpStatus.INTERNAL_SERVER_ERROR, error, ex));
 
 	}
-	
+
 	@ExceptionHandler(Exception.class)
-	public final ResponseEntity<Object> exceptionHandler(Exception ex,
-			WebRequest request) {
+	public final ResponseEntity<Object> exceptionHandler(Exception ex, WebRequest request) {
 		String error = ex.getMessage();
 		return buildResponseEntity(new RestApiErrors(HttpStatus.INTERNAL_SERVER_ERROR, error, ex));
 
 	}
-	
 
-	
 	private ResponseEntity<Object> buildResponseEntity(RestApiErrors restApiErrors) {
 		return new ResponseEntity<>(restApiErrors, restApiErrors.getStatus());
 	}

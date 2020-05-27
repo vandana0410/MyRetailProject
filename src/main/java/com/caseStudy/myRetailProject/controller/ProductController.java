@@ -17,6 +17,10 @@ import com.caseStudy.myRetailProject.model.Product;
 import com.caseStudy.myRetailProject.model.ProductApiResponse;
 import com.caseStudy.myRetailProject.service.ProductService;
 
+/**
+ * @author vandana
+ * This is the controller class.
+ */
 @RestController
 public class ProductController {
 
@@ -28,9 +32,10 @@ public class ProductController {
 	/*
 	 * To get all the products from the repository
 	 */
-	
-	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = "application/json")
+
+	@RequestMapping(value = "/products/all", method = RequestMethod.GET, produces = "application/json")
 	public List<Product> getAll() {
+		logger.info("Get all products");
 		return productService.getAll();
 	}
 
@@ -39,24 +44,22 @@ public class ProductController {
 	 */
 	@RequestMapping(value = "/products/{id}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<ProductApiResponse> getProduct(@PathVariable("id") Integer id) {
-		return new ResponseEntity<ProductApiResponse>(productService.getProductById(id),HttpStatus.OK);
+		logger.info("Get the product details for " + id);
+		return new ResponseEntity<ProductApiResponse>(productService.getProductById(id), HttpStatus.OK);
 	}
-	
+
 	/*
 	 * To update the current price of a given product
 	 */
 	@RequestMapping(value = "/products/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public ResponseEntity<Product> updateCurrentPrice(@RequestBody Product product, @PathVariable("id") Integer productId) {
-		
+	public ResponseEntity<Product> updateCurrentPrice(@RequestBody Product product,
+			@PathVariable("id") Integer productId) {
+
 		Product updateProduct = new Product();
-		try {
-			 updateProduct = productService.updatePriceById(product,productId);
-			
-		} catch (Exception ex) {
-			logger.info("Product not available");
-			
-		}
-		return new ResponseEntity<Product>(updateProduct,HttpStatus.OK);
+		logger.info("Update the current price for product" + productId);
+		updateProduct = productService.updatePriceById(product, productId);
+
+		return new ResponseEntity<Product>(updateProduct, HttpStatus.OK);
 	}
 
 }

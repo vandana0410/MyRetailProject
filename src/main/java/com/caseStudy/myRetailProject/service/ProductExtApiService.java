@@ -12,6 +12,10 @@ import org.springframework.web.client.RestTemplate;
 import com.caseStudy.myRetailProject.exceptions.ProductNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * @author vandana
+ * This class calls the external service to get the product name for the product id
+ */
 @Service
 public class ProductExtApiService {
 
