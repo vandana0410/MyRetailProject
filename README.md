@@ -68,7 +68,6 @@ Swagger UI -- http://localhost:8090/swagger-ui.html#/
 
 ![Get All Products](/images/GetProductAll.png)
 
-
 - Get product with valid product id
 
 ![Get Valid Product](/images/GetProductValid.png)
@@ -84,6 +83,8 @@ Swagger UI -- http://localhost:8090/swagger-ui.html#/
 - Update Product Price with invalid product id
 
 ![Update price invalid](/images/UpdatePriceInvalid.png)
+
+
 
 ### 7. Future Enhancements
 
